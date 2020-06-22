@@ -54,9 +54,42 @@ $db->collection('collect')->document('doc')->deleteThis(); // เป็นกา
 print_r($db->collection('collect')->readAll());
 ```
 
-#### เมธอดเข้าถึงด็อคคิวเมนท์และเมธอดสำหรับแก้ไขด็อคคิวเมนท์ | collection($collectionName)->document($documentName)
+#### เมธอดเข้าถึงด็อคคิวเมนท์และเมธอดสำหรับจัดการด็อคคิวเมนท์ | collection($collectionName)->document($documentName)
 เมื่อเราเข้าถึง document ได้แล้ว เมธอดจะคืนค่า Instance ของคลาสออกมาทำให้เราสามารถใช้งานฟังก์ชั่นที่เกี่ยวกับด็อคคิวเมนท์ได้ต่อทันที
 ```php
 $db->collection('collect')->document('doc')->update(['age' => 8]); // แก้ไขข้อมูล
 $db->collection('collect')->document('doc')->read(); // อ่านข้อมูล
+```
+
+#### เมธอดจำกัดข้อมูลหรือจำกัดด็อคคิวเมนท์ | collection($collectionName)->limit($limit)
+ถ้าหากต้องการกำหนดให้ไม่จำกัดให้ใส่ค่าเป็น -1 (โดยค่าปกติก็คือ -1)
+```php
+$db->collection('collect')->limit(5)->readAll();
+```
+
+#### เมธอดสำหรับเลือกเฉพาะด็อคคิวเมนท์ที่มีคุณสมบัติผ่านเงื่อนไข | collection($collectionName)->where($key, $operator, $value)
+ถ้ามีการใช้เมธอด `where()` เราจะใช้เมธอด get() เพื่อนำข้อมูลออกมาแสดง โดยจะคืนค่าออกมาเป็น Array
+```php
+$db->collection('collect')->where('key', '==', 'value')->where('key2', '==', 'value2')->get();
+```
+
+## ตัวอย่างการใช้งาน limit , where ร่วมกัน
+```php
+<?php
+  use QueryX\Common\LiteDatabase;
+  require_once __DIR__ . '/path/QueryxLite.php';
+  
+  $db = new LiteDatabase;
+  $db->set('collectionDir', 'path/for/keep/collection/files/'); // ต้องลงท้ายด้วย "/"
+  // ยังไม่จำเป็นในขณะนี้ $db->set('configFile', 'path/for/keep/config/fileName');
+  
+  $usersActive = $db->collection('users')
+                    ->limit(5)
+                    ->where('active', '==', true)
+                    ->get();
+  
+  foreach($usersActive as $user) {
+    echo $user['name'] . '<br/>';
+  }
+?>
 ```
