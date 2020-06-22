@@ -1,0 +1,13 @@
+{
+    "name": "queryx/litedatabase",
+    "description": "Tiny and Fast NoSQL | Lite Database",
+    "type": "project",
+    "license": "MIT License",
+    "authors": [
+        {
+            "name": "Framyomyim",
+            "email": "omyim.inc@gmail.com"
+        }
+    ],
+    "require": {}
+}
